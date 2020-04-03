@@ -7,10 +7,12 @@ SBCL_BATCH_EVALS = \
 SBCL_BATCH_EPILOGUE = --quit
 
 LISP_FILES = $(shell find . -name '*.lisp')
+ASD_FILES = $(shell find . -name '*.asd')
+SRC_FILES = $(LISP_FILES) $(ASD_FILES)
 
 all: falcon
 
-falcon: $(LISP_FILES)
+falcon: $(SRC_FILES)
 	sbcl $(SBCL_BATCH_PROLOGUE) $(SBCL_BATCH_EVALS) $(SBCL_BATCH_EPILOGUE)
 
 clean:
