@@ -4,13 +4,17 @@
 ;; Favorites tab populated
 ;; Regex filtering list
 
+;; Make a function to generate a new button pane given the parent.
+;; This way you can DELETE it, then recreate it.
+
+
 ;; BUG Windows version of Tk puts / marks in filepaths from file chooser
 
 (in-package #:falcon)
 
 (defparameter *master-list* nil)
 (defparameter *flags* nil)
-(defparameter *buttons-across* 1)
+(defparameter *buttons-across* 3)
 
 ;; The following are used to manipulate the button tray outside Tk
 (defparameter *button-hull* nil)
@@ -24,8 +28,8 @@
          (files nil))
 
     (setf *master-list* (uiop:directory-files (make-pathname :directory
-                                                             `(:absolute ,d)
-                                                             :name :wild :type :wild)))
+                                                             (list :absolute d))))
+    (dolist (i *master-list*) (print i))
     (finish-output)
     (refresh-tray)))
 
@@ -56,11 +60,11 @@
        (let ((path path))
          (grid (make-instance 'button
                               :master *button-hull*
-                              :text (file-namestring path)
+                              :text (uiop:native-namestring (file-namestring path))
                               :command (lambda() (uiop:launch-program 
                                                   (format nil "\"~a\" \"~a\"" ;Windows/Linux hack "command" "full path with spaces"
                                                           (text *prefix-field*)
-                                                          (namestring path)))))
+                                                          (uiop:native-namestring path)))))
                row column :sticky "EW" :padx 1 :pady 1))
        (cond ((>= column (1- *buttons-across*))
               (setf column 0)
@@ -100,7 +104,7 @@
            (run-parallel-label (make-instance 'label :master run-parallel-hull :text "Spawn New Process: "))
            (run-parallel-check (make-instance 'check-button :master run-parallel-hull))
 
-           (refresh-button (make-instance 'button :master tab-frame :text "Refresh" :command #'populate-from-directory))
+           (refresh-button (make-instance 'button :master tab-frame :text "Clear All"))
            (pw (make-instance 'scrolled-frame :master tab-frame :name "scrolled_frame"))
            (pw2 (make-instance 'scrolled-frame :master nb :name "scrolled_frame2")))
 
@@ -142,4 +146,6 @@
   ;; (loop :for (a b) :on *master-list* :by #'cddr collect (list a b)))
   ;; (format t "~a" *flags*)
 
-  (start-gui))
+  (start-gui)
+  (setf *master-list* nil)
+  )
