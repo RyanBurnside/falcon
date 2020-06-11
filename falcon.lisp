@@ -61,7 +61,7 @@
          (grid (make-instance 'button
                               :master *button-hull*
                               :text (uiop:native-namestring (file-namestring path))
-                              :command (lambda() (uiop:launch-program 
+                              :command (lambda() (uiop:launch-program
                                                   (format nil "\"~a\" \"~a\"" ;Windows/Linux hack "command" "full path with spaces"
                                                           (text *prefix-field*)
                                                           (uiop:native-namestring path)))))
