@@ -44,8 +44,10 @@
   (let* ((d (choose-directory :title "Choose a directory to populate files from"))
          (files nil))
 
-    (setf *master-list* (uiop:directory-files (make-pathname :directory
-                                                             (list :absolute d))))
+    (setf *master-list* (remove-if #'fad:directory-pathname-p (fad:list-directory d)))
+    (setf *master-list* (sort *master-list* (lambda (a b) (string< (string-upcase (uiop:native-namestring a))
+							     (string-upcase (uiop:native-namestring b))))))
+    (force-output)
 
     (refresh-tray)))
 

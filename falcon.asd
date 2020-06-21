@@ -6,7 +6,7 @@
   :license  "Specify license here"
   :version "0.5.1"
   :serial t
-  :depends-on (#:ltk #:apply-argv)
+  :depends-on (#:ltk #:cl-fad #:apply-argv)
   :components ((:file "package")
                (:file "falcon")))
 
